@@ -58,11 +58,11 @@ Create new content using advanced AI techniques.
 
 
 ### Co-Convener
-- **Mr. S. Sathish Kumar:** 8498901234, Assistant Professor
+- **Mr. S. Sathish Kumar:** 8015944125, Assistant Professor
 
 
 ### Convener & HOD (AIML)
-- **Dr. Gurrampally Kumar:** 8498901234, Associate Professor
+- **Dr. Gurrampally Kumar:** 9030046862, Associate Professor
 
 ---
 *Organized by the Department of AIML & CSE (AI&ML), JBIET.*
