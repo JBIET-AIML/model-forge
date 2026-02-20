@@ -52,9 +52,17 @@ Create new content using advanced AI techniques.
 - **Dig Vijay:** 7396296236
 
 ### Faculty Coordinators
-- **Ms. Maria Divya Teja:** 8498901234
-- **Mr. Purushotham M.:** 8074468134
-- **Ms. Sangeetha B.:** 9010946604
+- **Ms. Maria Divya Teja:** 8498901234, Assistant Professor
+- **Mr. Purushotham M.:** 8074468134, Assistant Professor
+- **Ms. Sangeetha B.:** 9010946604, Assistant Professor
+
+
+### Co-Convener
+- **Mr. S. Sathish Kumar:** 8498901234, Assistant Professor
+
+
+### Convener & HOD (AIML)
+- **Dr. Gurrampally Kumar:** 8498901234, Associate Professor
 
 ---
 *Organized by the Department of AIML & CSE (AI&ML), JBIET.*
