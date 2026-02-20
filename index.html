@@ -278,27 +278,27 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2">
-                    <div
-                        class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-orbitron font-bold text-black text-xl">
-                        JB</div>
-                    <span class="font-orbitron font-bold text-lg hidden sm:block">JBIET</span>
+                    <img class="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center"
+                        src="jb-logo.png" alt="logo" />
+                    <span class="font-orbitron font-bold text-3xl hidden sm:block">JBIET</span>
                 </div>
                 <div class="hidden md:flex space-x-8">
                     <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
-                    <a href="#tracks" class="hover:text-cyan-400 transition-colors">Tracks</a>
+                    <a href="#models" class="hover:text-cyan-400 transition-colors">Models</a>
                     <a href="#details" class="hover:text-cyan-400 transition-colors">Details</a>
                     <a href="#contact" class="hover:text-cyan-400 transition-colors">Contact</a>
                 </div>
-                <button
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfENHZLJ-09EuN-hygqh1z3tMvYNlqa3z8HlhjItQre44q4RA/viewform"
+                    target="_blank"
                     class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2 px-6 rounded-full transition-all transform hover:scale-105 pulse-btn font-orbitron text-sm">
                     Register Now
-                </button>
+                </a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+    <section id="about" class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-black/50"></div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -348,14 +348,16 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center reveal">
-                <button
-                    class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-4 px-8 rounded-full transition-all transform hover:scale-105 pulse-btn font-orbitron text-lg">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfENHZLJ-09EuN-hygqh1z3tMvYNlqa3z8HlhjItQre44q4RA/viewform"
+                    target="_blank"
+                    class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-4 px-8 rounded-full transition-all transform hover:scale-105 pulse-btn font-orbitron text-lg text-center">
                     Register Team
-                </button>
-                <button
-                    class="border border-cyan-500/50 hover:bg-cyan-500/10 text-cyan-400 font-bold py-4 px-8 rounded-full transition-all font-orbitron text-lg backdrop-blur-sm">
+                </a>
+
+                <a href="model-forge-hackthon.jpeg" target="_blank"
+                    class="border border-cyan-500/50 hover:bg-cyan-500/10 text-cyan-400 font-bold py-4 px-8 rounded-full transition-all font-orbitron text-lg backdrop-blur-sm inline-block text-center">
                     View Guidelines
-                </button>
+                </a>
             </div>
         </div>
 
@@ -406,23 +408,23 @@
                     </div>
                     <h3 class="font-orbitron text-xl font-bold mb-2 text-pink-400">Registration</h3>
                     <p class="text-gray-300 text-lg font-semibold">₹100/- per head</p>
-                    <p class="text-gray-400">Exciting Prizes Worth ₹XX,XXX</p>
+                    <p class="text-gray-400">Exciting Prizes</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ML Tracks -->
-    <section id="tracks" class="py-20 relative overflow-hidden">
+    <!-- ML Models -->
+    <section id="models" class="py-20 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-r from-cyan-900/10 to-purple-900/10"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-16 reveal">
-                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-4 gradient-text">COMPETITION TRACKS</h2>
+                <h2 class="font-orbitron text-4xl md:text-5xl font-bold mb-4 gradient-text">COMPETITION MODELS</h2>
                 <p class="text-gray-400 text-lg">Choose your domain and forge the future</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="model-card rounded-2xl p-8 group cursor-pointer reveal">
+                <a href="AIvsHuman.html" class="model-card rounded-2xl p-8 group cursor-pointer reveal block">
                     <div class="flex items-start justify-between mb-4">
                         <div
                             class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-black font-bold text-xl">
@@ -438,9 +440,9 @@
                         Natural Language Processing</h3>
                     <p class="text-gray-400">Build models that understand, interpret, and generate human language. From
                         sentiment analysis to chatbots.</p>
-                </div>
+                </a>
 
-                <div class="model-card rounded-2xl p-8 group cursor-pointer reveal">
+                <a href="macroQuant.html" class="model-card rounded-2xl p-8 group cursor-pointer reveal block">
                     <div class="flex items-start justify-between mb-4">
                         <div
                             class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-400 flex items-center justify-center text-black font-bold text-xl">
@@ -456,9 +458,9 @@
                         Time Series & Forecasting</h3>
                     <p class="text-gray-400">Predict future trends using historical data. Stock prices, weather
                         forecasting, and demand prediction.</p>
-                </div>
+                </a>
 
-                <div class="model-card rounded-2xl p-8 group cursor-pointer reveal">
+                <a href="Classroom.html" class="model-card rounded-2xl p-8 group cursor-pointer reveal block">
                     <div class="flex items-start justify-between mb-4">
                         <div
                             class="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500 to-red-400 flex items-center justify-center text-black font-bold text-xl">
@@ -474,9 +476,9 @@
                         Computer Vision</h3>
                     <p class="text-gray-400">Enable machines to see and understand visual information. Image
                         classification, object detection, and more.</p>
-                </div>
+                </a>
 
-                <div class="model-card rounded-2xl p-8 group cursor-pointer reveal">
+                <a href="GenAI.html" class="model-card rounded-2xl p-8 group cursor-pointer reveal block">
                     <div class="flex items-start justify-between mb-4">
                         <div
                             class="w-12 h-12 rounded-lg bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center text-black font-bold text-xl">
@@ -492,7 +494,7 @@
                         Generative AI</h3>
                     <p class="text-gray-400">Create new content with AI. GANs, VAEs, and diffusion models for generating
                         images, text, and music.</p>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -501,7 +503,7 @@
     <section class="py-20 relative">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
             <h2 class="font-orbitron text-4xl md:text-6xl font-black mb-8 gradient-text">"EXCITING PRIZES"</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 items-center">
                 <div class="relative group">
                     <div
                         class="absolute inset-0 bg-gradient-to-b from-yellow-500/20 to-transparent rounded-2xl blur-xl group-hover:blur-2xl transition-all">
@@ -509,7 +511,7 @@
                     <div class="relative model-card rounded-2xl p-8 border-t-4 border-yellow-400">
                         <div class="text-5xl mb-4">🥇</div>
                         <h3 class="font-orbitron text-2xl font-bold text-yellow-400 mb-2">Winner</h3>
-                        <p class="text-gray-300">Cash Prize + Certificate + Internship Opportunities</p>
+                        <p class="text-gray-300">Cash Prize + Certificate + Goodies</p>
                     </div>
                 </div>
                 <div class="relative group">
@@ -519,17 +521,7 @@
                     <div class="relative model-card rounded-2xl p-8 border-t-4 border-gray-400">
                         <div class="text-5xl mb-4">🥈</div>
                         <h3 class="font-orbitron text-2xl font-bold text-gray-300 mb-2">1st Runner Up</h3>
-                        <p class="text-gray-300">Cash Prize + Certificate + Goodies</p>
-                    </div>
-                </div>
-                <div class="relative group">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-b from-orange-700/20 to-transparent rounded-2xl blur-xl group-hover:blur-2xl transition-all">
-                    </div>
-                    <div class="relative model-card rounded-2xl p-8 border-t-4 border-orange-600">
-                        <div class="text-5xl mb-4">🥉</div>
-                        <h3 class="font-orbitron text-2xl font-bold text-orange-400 mb-2">2nd Runner Up</h3>
-                        <p class="text-gray-300">Cash Prize + Certificate</p>
+                        <p class="text-gray-300">Certificate + Goodies</p>
                     </div>
                 </div>
             </div>
@@ -579,7 +571,7 @@
                     <div class="space-y-4">
                         <div class="flex items-center justify-between p-4 model-card rounded-xl">
                             <div>
-                                <p class="font-semibold text-white">Maria Divya Teja</p>
+                                <p class="font-semibold text-white">Ms. Maria Divya Teja</p>
                                 <p class="text-sm text-gray-400">Faculty Coordinator</p>
                             </div>
                             <a href="tel:8498901234"
@@ -587,7 +579,7 @@
                         </div>
                         <div class="flex items-center justify-between p-4 model-card rounded-xl">
                             <div>
-                                <p class="font-semibold text-white">M. Purushotham</p>
+                                <p class="font-semibold text-white">Mr. Purushotham M.</p>
                                 <p class="text-sm text-gray-400">Faculty Coordinator</p>
                             </div>
                             <a href="tel:8074468134"
@@ -595,7 +587,7 @@
                         </div>
                         <div class="flex items-center justify-between p-4 model-card rounded-xl">
                             <div>
-                                <p class="font-semibold text-white">B. Sangeetha</p>
+                                <p class="font-semibold text-white">Ms. Sangeetha B.</p>
                                 <p class="text-sm text-gray-400">Faculty Coordinator</p>
                             </div>
                             <a href="tel:9010946604"
@@ -610,11 +602,11 @@
 
                         <div class="flex items-center justify-between p-4 model-card rounded-xl">
                             <div>
-                                <p class="font-semibold text-white">G. Kumar</p>
+                                <p class="font-semibold text-white">Dr. Gurrampally Kumar</p>
                                 <p class="text-sm text-gray-400">HOD (AIML)</p>
                             </div>
-                            <a href="tel:9010946604"
-                                class="text-purple-400 hover:text-purple-300 font-mono">9010946604</a>
+                            <a href="tel:9030046862"
+                                class="text-purple-400 hover:text-purple-300 font-mono">9030046862</a>
                         </div>
                     </div>
                 </div>
