@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenAI Vision 2026: Image Enhancement & Super-Resolution Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #050508;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        /* Animated Background */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+        
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c1;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 #00fff9;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            20% { clip: rect(78px, 9999px, 20px, 0); }
+            40% { clip: rect(15px, 9999px, 67px, 0); }
+            60% { clip: rect(89px, 9999px, 12px, 0); }
+            80% { clip: rect(45px, 9999px, 78px, 0); }
+            100% { clip: rect(62px, 9999px, 34px, 0); }
+        }
+        
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 99px, 0); }
+            20% { clip: rect(12px, 9999px, 45px, 0); }
+            40% { clip: rect(78px, 9999px, 23px, 0); }
+            60% { clip: rect(34px, 9999px, 89px, 0); }
+            80% { clip: rect(56px, 9999px, 12px, 0); }
+            100% { clip: rect(23px, 9999px, 67px, 0); }
+        }
+        
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            10% { transform: skew(-2deg); }
+            20% { transform: skew(2deg); }
+            30% { transform: skew(0deg); }
+            100% { transform: skew(0deg); }
+        }
+        
+        /* Neon Glow */
+        .neon-text {
+            text-shadow: 0 0 10px rgba(0, 255, 249, 0.5),
+                         0 0 20px rgba(0, 255, 249, 0.5),
+                         0 0 40px rgba(0, 255, 249, 0.5);
+        }
+        
+        .neon-border {
+            box-shadow: 0 0 10px rgba(0, 255, 249, 0.3),
+                        0 0 20px rgba(0, 255, 249, 0.3);
+        }
+        
+        /* Card Hover Effects */
+        .model-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .model-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 255, 249, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 255, 249, 0.2);
+        }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(45deg, #00fff9, #ff00c1, #00fff9);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s ease infinite;
+        }
+        
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Grid Background */
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(0, 255, 249, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 249, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 255, 249, 0.1);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 249, 0.5);
+            border-radius: 4px;
+        }
+        
+        /* Button Pulse */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 249, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 249, 0.8); }
+        }
+        
+        .pulse-btn {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        /* Countdown */
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 249, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <!-- Three.js Background -->
+    <div id="canvas-container"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 left-0 bg-black/50 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="font-orbitron text-2xl font-bold gradient-text">GenAI Vision 2026</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#details" class="text-white hover:text-cyan-400 transition-colors">Details</a>
+                    <a href="#tracks" class="text-white hover:text-cyan-400 transition-colors">Tracks</a>
+                    <a href="#prizes" class="text-white hover:text-cyan-400 transition-colors">Evaluation</a>
+                    <a href="#contact" class="text-white hover:text-cyan-400 transition-colors">Rules</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-black/50"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="font-orbitron text-6xl md:text-8xl font-black glitch neon-text mb-6" data-text="GenAI Vision 2026">
+                GenAI Vision <span class="gradient-text">2026</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                Image Enhancement & Super-Resolution Challenge
+            </p>
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8 mb-12">
+                <div class="countdown-item">
+                    <div class="text-3xl font-bold text-cyan-400" id="days">00</div>
+                    <div class="text-sm text-gray-400">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="text-3xl font-bold text-cyan-400" id="hours">00</div>
+                    <div class="text-sm text-gray-400">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="text-3xl font-bold text-cyan-400" id="minutes">00</div>
+                    <div class="text-sm text-gray-400">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="text-3xl font-bold text-cyan-400" id="seconds">00</div>
+                    <div class="text-sm text-gray-400">Seconds</div>
+                </div>
+            </div>
+            <a href="#details" class="inline-block bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold py-4 px-8 rounded-lg hover:from-cyan-600 hover:to-purple-700 transition-all pulse-btn">
+                Explore Challenge
+            </a>
+        </div>
+
+        <!-- Floating Elements -->
+        <div class="absolute top-1/4 left-10 w-20 h-20 border border-cyan-500/20 rounded-full floating opacity-50"></div>
+        <div class="absolute bottom-1/4 right-10 w-32 h-32 border border-purple-500/20 rounded-full floating opacity-50" style="animation-delay: 2s;"></div>
+    </section>
+
+    <!-- Event Details -->
+    <section id="details" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-4xl font-bold gradient-text mb-4">Background</h2>
+                <p class="text-gray-300 max-w-4xl mx-auto">
+                    In many real-world scenarios — surveillance systems, medical imaging, satellite monitoring, and mobile photography — captured images suffer from low resolution, noise, blur, and unknown degradation processes. Enhancing low-quality images into high-resolution, visually faithful outputs is a core challenge in computer vision and generative AI.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="model-card p-8 rounded-lg">
+                    <h3 class="font-orbitron text-2xl font-bold text-cyan-400 mb-4">Core Objective</h3>
+                    <p class="text-gray-300 mb-4">
+                        Participants must build a model that takes Low-Resolution (LR) images as input and outputs High-Resolution (HR) enhanced images, upscaling by a factor of ×2, handling unknown degradation operators.
+                    </p>
+                </div>
+                <div class="model-card p-8 rounded-lg">
+                    <h3 class="font-orbitron text-2xl font-bold text-cyan-400 mb-4">Dataset Description</h3>
+                    <p class="text-gray-300 mb-4">
+                        The dataset consists of paired images: High-Resolution Images (HR) as ground truth targets, and Low-Resolution Images (LR) generated using unknown degradation operators including Gaussian blur, noise injection, compression artifacts, and mixed distortions.
+                    </p>
+                    <p class="text-gray-300">
+                        Participants must learn the degradation mapping implicitly.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ML Tracks -->
+    <section id="tracks" class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-cyan-900/10 to-purple-900/10"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-4xl font-bold gradient-text mb-4">Challenge Tracks</h2>
+            </div>
+            <div class="grid md:grid-cols-1 gap-8">
+                <div class="model-card p-8 rounded-lg">
+                    <h3 class="font-orbitron text-xl font-bold text-cyan-400 mb-4">Track 2 – Unknown Degradation (×2)</h3>
+                    <p class="text-gray-300 mb-4">
+                        Upscale LR images by a factor of 2 and reconstruct high-quality HR outputs. No knowledge of the degradation process will be provided.
+                    </p>
+                </div>
+            </div>
+            <div class="mt-12">
+                <h3 class="font-orbitron text-2xl font-bold text-cyan-400 mb-4">Allowed Approaches</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="model-card p-6 rounded-lg">
+                        <h4 class="font-orbitron text-lg font-bold text-cyan-400 mb-2">CNN-based Models</h4>
+                        <ul class="text-gray-300 space-y-1">
+                            <li>• SRCNN</li>
+                            <li>• EDSR</li>
+                            <li>• RCAN</li>
+                        </ul>
+                    </div>
+                    <div class="model-card p-6 rounded-lg">
+                        <h4 class="font-orbitron text-lg font-bold text-cyan-400 mb-2">GAN-based Methods</h4>
+                        <ul class="text-gray-300 space-y-1">
+                            <li>• SRGAN</li>
+                            <li>• ESRGAN</li>
+                        </ul>
+                    </div>
+                    <div class="model-card p-6 rounded-lg">
+                        <h4 class="font-orbitron text-lg font-bold text-cyan-400 mb-2">Transformer-based Models</h4>
+                        <ul class="text-gray-300 space-y-1">
+                            <li>• SwinIR</li>
+                            <li>• Vision Transformers</li>
+                        </ul>
+                    </div>
+                    <div class="model-card p-6 rounded-lg">
+                        <h4 class="font-orbitron text-lg font-bold text-cyan-400 mb-2">Diffusion-based Models</h4>
+                        <p class="text-gray-300">Pretrained models are allowed but must be disclosed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prizes Section -->
+    <section id="prizes" class="py-20 relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <h2 class="font-orbitron text-4xl font-bold gradient-text mb-8">Evaluation Metrics</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="model-card p-8 rounded-lg">
+                    <h3 class="font-orbitron text-2xl font-bold text-cyan-400 mb-4">Objective Metrics</h3>
+                    <ul class="text-gray-300 space-y-2">
+                        <li>• PSNR (Peak Signal-to-Noise Ratio)</li>
+                        <li>• SSIM (Structural Similarity Index)</li>
+                        <li>• Higher is better</li>
+                    </ul>
+                </div>
+                <div class="model-card p-8 rounded-lg">
+                    <h3 class="font-orbitron text-2xl font-bold text-cyan-400 mb-4">Perceptual Quality (Bonus)</h3>
+                    <ul class="text-gray-300 space-y-2">
+                        <li>• LPIPS (Learned Perceptual Image Patch Similarity)</li>
+                        <li>• Human evaluation score</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12">
+                <h3 class="font-orbitron text-2xl font-bold text-cyan-400 mb-4">Scoring Breakdown</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="model-card p-4 rounded-lg">
+                        <div class="text-cyan-400 font-bold">PSNR</div>
+                        <div class="text-gray-300">40%</div>
+                    </div>
+                    <div class="model-card p-4 rounded-lg">
+                        <div class="text-cyan-400 font-bold">SSIM</div>
+                        <div class="text-gray-300">30%</div>
+                    </div>
+                    <div class="model-card p-4 rounded-lg">
+                        <div class="text-cyan-400 font-bold">Generalization</div>
+                        <div class="text-gray-300">15%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Organizers -->
+    <section id="contact" class="py-20 relative bg-black/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-orbitron text-4xl font-bold gradient-text mb-4">Rules & Constraints</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="model-card p-8 rounded-lg">
+                    <h3 class="font-orbitron text-2xl font-bold text-cyan-400 mb-4">Key Rules</h3>
+                    <ul class="text-gray-300 space-y-2">
+                        <li>• Only provided training data may be used</li>
+                        <li>• Test ground truth HR images will not be provided</li>
+                        <li>• Inference must be reproducible</li>
+                        <li>• Models must upscale exactly ×2</li>
+                        <li>• No manual editing of outputs</li>
+                    </ul>
+                </div>
+                <div class="model-card p-8 rounded-lg">
+                    <h3 class="font-orbitron text-2xl font-bold text-cyan-400 mb-4">Submission Requirements</h3>
+                    <ul class="text-gray-300 space-y-2">
+                        <li>• Enhanced HR images for the validation/test LR inputs</li>
+                        <li>• Model architecture description</li>
+                        <li>• Training methodology</li>
+                        <li>• Hyperparameter configuration</li>
+                        <li>• Runtime and hardware specifications</li>
+                        <li>• Short technical report (max 8 pages)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-12 bg-black/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-400">GenAI Vision 2026 - Image Enhancement & Super-Resolution Challenge</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Three.js Background Animation
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Create particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1500;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 10;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.005,
+            color: 0x00fff9,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        camera.position.z = 5;
+
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX / window.innerWidth - 0.5;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.x += 0.0005;
+            particlesMesh.rotation.y += 0.0005;
+            particlesMesh.rotation.z += 0.0005;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Countdown Timer - Placeholder
+        const targetDate = new Date('March 1, 2026 09:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+
+            if (distance < 0) {
+                document.getElementById('days').innerText = '00';
+                document.getElementById('hours').innerText = '00';
+                document.getElementById('minutes').innerText = '00';
+                document.getElementById('seconds').innerText = '00';
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Parallax effect for floating elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            document.querySelectorAll('.floating').forEach(el => {
+                el.style.transform = `translateY(${rate}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
