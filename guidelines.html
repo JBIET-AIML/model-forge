@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODEL FORGE 2026 | Hackathon Guidelines</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: radial-gradient(circle at top, #020617 0, #020617 35%, #020617 50%, #000 100%);
+            color: #fff;
+        }
+
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #00f5ff, #ff00c1, #00f5ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-3">
+                <img src="jb-logo.png" alt="JBIET Logo" class="h-10 w-10 rounded-lg" />
+                <div>
+                    <p class="font-orbitron font-bold text-xl leading-tight">MODEL FORGE 2026</p>
+                    <p class="text-xs text-gray-400">JB Institute of Engineering & Technology</p>
+                </div>
+            </div>
+            <a href="index.html"
+                class="text-xs md:text-sm border border-cyan-500/60 text-cyan-300 px-4 py-2 rounded-full hover:bg-cyan-500/10 transition-colors">
+                ← Back to main page
+            </a>
+        </div>
+
+        <header class="mb-8 md:mb-10">
+            <p class="uppercase tracking-[0.25em] text-xs md:text-sm text-cyan-300 mb-3">Official Guidelines</p>
+            <h1 class="font-orbitron text-3xl md:text-4xl lg:text-5xl font-black gradient-text mb-3">
+                Hackathon Rules & Instructions
+            </h1>
+            <p class="text-gray-300 text-sm md:text-base max-w-2xl">
+                Please read these guidelines carefully before the event. All teams are expected to follow them
+                throughout the hackathon.
+            </p>
+        </header>
+
+        <main class="space-y-8 md:space-y-10 text-sm md:text-base leading-relaxed">
+            <section class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6">
+                <h2 class="font-orbitron text-lg md:text-xl text-cyan-300 mb-3">1. Eligibility & Team Formation</h2>
+                <ul class="list-disc list-inside space-y-1 text-gray-200">
+                    <li>Open to students of JBIET and invited institutions (as notified by organizers).</li>
+                    <li>Each team must consist of <span class="font-semibold text-cyan-300">3–4 members</span>.</li>
+                    <li>All members must be registered via the official Google Form before the deadline.</li>
+                    <li>A participant can be part of only one team.</li>
+                </ul>
+            </section>
+
+            <section class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6">
+                <h2 class="font-orbitron text-lg md:text-xl text-cyan-300 mb-3">2. Problem Statements & Tracks</h2>
+                <ul class="list-disc list-inside space-y-1 text-gray-200">
+                    <li>Tracks include:
+                        <span class="text-cyan-300">NLP, Time Series & Forecasting, Computer Vision, Generative AI</span>.
+                    </li>
+                    <li>Final problem statements / datasets will be provided on the day of the hackathon.</li>
+                    <li>Teams must build their own models from scratch using the given data (no pre-trained models unless
+                        explicitly allowed by organizers).</li>
+                    <li>External public datasets are allowed only if organizers approve and if they are clearly cited.</li>
+                </ul>
+            </section>
+
+            <section class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6">
+                <h2 class="font-orbitron text-lg md:text-xl text-cyan-300 mb-3">3. Development Rules</h2>
+                <ul class="list-disc list-inside space-y-1 text-gray-200">
+                    <li>Coding must be done <span class="font-semibold">during the event time</span> only.</li>
+                    <li>Teams may use any programming language and ML libraries (Python preferred: NumPy, pandas, scikit-learn,
+                        PyTorch, TensorFlow, etc.).</li>
+                    <li>Use of AI tools (e.g., ChatGPT, Copilot) is allowed for assistance, but
+                        <span class="font-semibold text-cyan-300">final logic must be understood by the team</span>.
+                    </li>
+                    <li>All code should be original to the team and not copied from existing GitHub projects without
+                        significant modification and understanding.</li>
+                </ul>
+            </section>
+
+            <section class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6">
+                <h2 class="font-orbitron text-lg md:text-xl text-cyan-300 mb-3">4. Evaluation & Judging Criteria</h2>
+                <ul class="list-disc list-inside space-y-1 text-gray-200">
+                    <li><span class="font-semibold">Model Performance</span> – accuracy / error metrics appropriate to the
+                        task.</li>
+                    <li><span class="font-semibold">Approach & ML Design</span> – feature engineering, model selection,
+                        experimentation.</li>
+                    <li><span class="font-semibold">Code Quality</span> – clarity, reproducibility, structure, and
+                        documentation.</li>
+                    <li><span class="font-semibold">Presentation & Explanation</span> – clarity in explaining decisions,
+                        results, and trade-offs.</li>
+                    <li><span class="font-semibold">Originality</span> – creativity in approach and solution design.</li>
+                </ul>
+            </section>
+
+            <section class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6">
+                <h2 class="font-orbitron text-lg md:text-xl text-cyan-300 mb-3">5. Submission Requirements</h2>
+                <ul class="list-disc list-inside space-y-1 text-gray-200">
+                    <li>Teams must submit:
+                        <ul class="list-disc list-inside ml-5 mt-1 space-y-1">
+                            <li>Code (Jupyter notebook and/or Python scripts).</li>
+                            <li>A short readme / report describing approach, model, and results.</li>
+                            <li>Any configuration or requirements file (if needed to run the code).</li>
+                        </ul>
+                    </li>
+                    <li>Submissions after the deadline may not be evaluated.</li>
+                    <li>Each team must be ready with a short demo / presentation (5–7 minutes).</li>
+                </ul>
+            </section>
+
+            <section class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6">
+                <h2 class="font-orbitron text-lg md:text-xl text-cyan-300 mb-3">6. Conduct & Fair Use</h2>
+                <ul class="list-disc list-inside space-y-1 text-gray-200">
+                    <li>Plagiarism (code or ideas) is strictly prohibited and may lead to disqualification.</li>
+                    <li>Teams must behave professionally and respectfully towards organizers, mentors, judges, and other
+                        teams.</li>
+                    <li>Any attempt to manipulate results, misuse data, or violate rules will lead to immediate
+                        disqualification.</li>
+                    <li>Decisions of the judging panel and organizers will be final and binding.</li>
+                </ul>
+            </section>
+
+            <section class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6">
+                <h2 class="font-orbitron text-lg md:text-xl text-cyan-300 mb-3">7. Logistics & Setup</h2>
+                <ul class="list-disc list-inside space-y-1 text-gray-200">
+                    <li>Participants should bring their own laptops, chargers, and necessary accessories.</li>
+                    <li>Internet access will be provided as per institute policy; downloading large models / datasets may
+                        be restricted.</li>
+                    <li>Teams are responsible for regularly saving their work and maintaining backups.</li>
+                </ul>
+            </section>
+
+            <section class="bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6">
+                <h2 class="font-orbitron text-lg md:text-xl text-cyan-300 mb-3">8. Queries & Support</h2>
+                <p class="text-gray-200 mb-2">
+                    For any clarification related to rules, problem statements, or logistics, please contact the Student
+                    or Faculty Coordinators listed on the main page.
+                </p>
+                <p class="text-gray-400 text-xs md:text-sm">
+                    Note: Organizers reserve the right to update or refine these guidelines before or during the event. Any
+                    changes will be communicated to all teams.
+                </p>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>
+

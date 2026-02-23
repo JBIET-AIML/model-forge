@@ -229,6 +229,28 @@
             transform: translateY(0);
         }
 
+        /* Nav underline hover */
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #00f5ff, #ff00c1);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.25s ease-out;
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -265,6 +287,245 @@
             background: rgba(0, 245, 255, 0.1);
             border: 1px solid rgba(0, 245, 255, 0.3);
         }
+
+        /* Department Section */
+        .dept-section {
+            position: relative;
+            overflow: hidden;
+            padding: 4.5rem 1.5rem;
+            background:
+                radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617 60%, #000 100%),
+                linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(168, 85, 247, 0.04));
+        }
+
+        .dept-inner {
+            max-width: 72rem;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dept-glass {
+            position: relative;
+            padding: 2.5rem 1.75rem;
+            border-radius: 1.5rem;
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            box-shadow:
+                0 0 40px rgba(34, 211, 238, 0.15),
+                0 0 80px rgba(56, 189, 248, 0.05);
+            backdrop-filter: blur(18px);
+        }
+
+        .dept-glass::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border-top: 1px solid rgba(34, 211, 238, 0.8);
+            border-left: 1px solid rgba(129, 140, 248, 0.4);
+            border-right: 1px solid rgba(236, 72, 153, 0.25);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .dept-kicker {
+            font-size: 0.75rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: rgba(148, 163, 184, 0.9);
+            margin-bottom: 0.9rem;
+        }
+
+        .dept-title {
+            font-family: 'Orbitron', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.1rem);
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
+        }
+
+        .dept-subtitle {
+            font-family: 'Rajdhani', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: clamp(1.1rem, 2.4vw, 1.45rem);
+            font-weight: 500;
+            color: rgba(209, 213, 219, 0.95);
+        }
+
+        .dept-highlight {
+            font-weight: 800;
+        }
+
+        /* Shimmer gradient text */
+        .dept-shimmer {
+            background: linear-gradient(120deg, #22d3ee, #a855f7, #38bdf8, #22d3ee);
+            background-size: 250% 250%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: dept-shimmer-move 8s ease-in-out infinite;
+        }
+
+        @keyframes dept-shimmer-move {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Soft neon glow pulse */
+        .dept-glow {
+            text-shadow:
+                0 0 8px rgba(34, 211, 238, 0.4),
+                0 0 18px rgba(129, 140, 248, 0.35),
+                0 0 26px rgba(236, 72, 153, 0.25);
+            animation: dept-glow-pulse 4.5s ease-in-out infinite;
+        }
+
+        @keyframes dept-glow-pulse {
+            0%,
+            100% {
+                text-shadow:
+                    0 0 6px rgba(34, 211, 238, 0.25),
+                    0 0 14px rgba(129, 140, 248, 0.25),
+                    0 0 20px rgba(236, 72, 153, 0.18);
+            }
+
+            50% {
+                text-shadow:
+                    0 0 10px rgba(34, 211, 238, 0.5),
+                    0 0 24px rgba(129, 140, 248, 0.4),
+                    0 0 34px rgba(236, 72, 153, 0.3);
+            }
+        }
+
+        /* Background grid overlay */
+        .dept-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(30, 64, 175, 0.22) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 64, 175, 0.18) 1px, transparent 1px);
+            background-size: 70px 70px;
+            opacity: 0.18;
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        /* Floating particles */
+        .dept-particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .dept-particles span {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 999px;
+            background: radial-gradient(circle, #bae6fd, transparent 60%);
+            opacity: 0.5;
+            animation: dept-float-particle 18s linear infinite;
+        }
+
+        .dept-particles span:nth-child(1) {
+            top: 12%;
+            left: 18%;
+            animation-duration: 16s;
+        }
+
+        .dept-particles span:nth-child(2) {
+            top: 26%;
+            left: 72%;
+            animation-duration: 22s;
+        }
+
+        .dept-particles span:nth-child(3) {
+            top: 58%;
+            left: 30%;
+            animation-duration: 19s;
+        }
+
+        .dept-particles span:nth-child(4) {
+            top: 70%;
+            left: 80%;
+            animation-duration: 24s;
+        }
+
+        .dept-particles span:nth-child(5) {
+            top: 40%;
+            left: 10%;
+            animation-duration: 21s;
+        }
+
+        .dept-particles span:nth-child(6) {
+            top: 18%;
+            left: 52%;
+            animation-duration: 20s;
+        }
+
+        .dept-particles span:nth-child(7) {
+            top: 78%;
+            left: 42%;
+            animation-duration: 23s;
+        }
+
+        .dept-particles span:nth-child(8) {
+            top: 32%;
+            left: 88%;
+            animation-duration: 17s;
+        }
+
+        .dept-particles span:nth-child(9) {
+            top: 84%;
+            left: 20%;
+            animation-duration: 25s;
+        }
+
+        .dept-particles span:nth-child(10) {
+            top: 6%;
+            left: 60%;
+            animation-duration: 18s;
+        }
+
+        @keyframes dept-float-particle {
+            0% {
+                transform: translate3d(0, 0, 0) scale(1);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: translate3d(18px, -26px, 0) scale(1.2);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate3d(0, -52px, 0) scale(1);
+                opacity: 0.3;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .dept-glass {
+                padding: 3rem 3rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .dept-section {
+                padding: 3.5rem 1.25rem;
+            }
+        }
     </style>
 </head>
 
@@ -282,17 +543,19 @@
                         src="jb-logo.png" alt="logo" />
                     <span class="font-orbitron font-bold text-3xl hidden sm:block">JBIET</span>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
-                    <a href="#models" class="hover:text-cyan-400 transition-colors">Models</a>
-                    <a href="#details" class="hover:text-cyan-400 transition-colors">Details</a>
-                    <a href="#contact" class="hover:text-cyan-400 transition-colors">Contact</a>
+                <div class="flex items-center gap-8">
+                    <div class="hidden md:flex space-x-8 text-right">
+                        <a href="#about" class="nav-link hover:text-cyan-400 transition-colors">About</a>
+                        <a href="#models" class="nav-link hover:text-cyan-400 transition-colors">Models</a>
+                        <a href="#details" class="nav-link hover:text-cyan-400 transition-colors">Details</a>
+                        <a href="#contact" class="nav-link hover:text-cyan-400 transition-colors">Contact</a>
+                    </div>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfENHZLJ-09EuN-hygqh1z3tMvYNlqa3z8HlhjItQre44q4RA/viewform"
+                        target="_blank"
+                        class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2 px-6 rounded-full transition-all transform hover:scale-105 pulse-btn font-orbitron text-sm">
+                        Register Now
+                    </a>
                 </div>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfENHZLJ-09EuN-hygqh1z3tMvYNlqa3z8HlhjItQre44q4RA/viewform"
-                    target="_blank"
-                    class="bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-2 px-6 rounded-full transition-all transform hover:scale-105 pulse-btn font-orbitron text-sm">
-                    Register Now
-                </a>
             </div>
         </div>
     </nav>
@@ -303,9 +566,10 @@
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="mb-6 reveal">
-                <span class="inline-block px-3 py-2 text-cyan-500 text-sm font-semibold tracking-wider mb-4">
-                    Department of <br />Artificial Intelligence & Machine Learning<br />&<br />CSE(Artificial
-                    Intelligence &
+                <span
+                    class="inline-block px-3 py-2 text-sm font-semibold tracking-wider mb-4 dept-shimmer dept-glow">
+                    Department of <br />Artificial Intelligence &amp; Machine Learning<br />&amp;<br />CSE (Artificial
+                    Intelligence &amp;
                     Machine Learning)
                 </span>
             </div>
@@ -317,7 +581,7 @@
             </h1>
 
             <p class="text-xl md:text-2xl text-gray-300 mb-8 font-light tracking-widest reveal">
-                INNOVATE • BUILD • DEPLOY
+                <span id="tagline"></span>
             </p>
 
             <p class="max-w-2xl mx-auto text-gray-400 mb-12 text-lg reveal">
@@ -329,7 +593,7 @@
 
             <!-- Countdown Timer -->
 
-            <p class="glitch gradient-text text-2xl mb-4">
+            <p class="glitch gradient-text text-2xl mb-4 reveal">
                 25-02-2026 09:30AM
             </p>
             <div class="flex justify-center gap-4 mb-12 reveal" id="countdown">
@@ -355,13 +619,31 @@
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSfENHZLJ-09EuN-hygqh1z3tMvYNlqa3z8HlhjItQre44q4RA/viewform"
                     target="_blank"
                     class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold py-4 px-8 rounded-full transition-all transform hover:scale-105 pulse-btn font-orbitron text-lg text-center">
-                    Register Team
+                    Register Now
                 </a>
 
-                <a href="model-forge-hackthon.jpeg" target="_blank"
+                <a href="guidelines.html" target="_blank"
                     class="border border-cyan-500/50 hover:bg-cyan-500/10 text-cyan-400 font-bold py-4 px-8 rounded-full transition-all font-orbitron text-lg backdrop-blur-sm inline-block text-center">
-                    View Guidelines
+                    Hackathon Guidelines
                 </a>
+            </div>
+
+            <!-- Poster Link Section (Button Only) -->
+            <div class="mt-10 max-w-3xl mx-auto reveal">
+                <div class="model-card rounded-2xl border border-cyan-500/40 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-left">
+                        <p class="font-orbitron text-sm tracking-[0.25em] text-cyan-300 uppercase mb-1">
+                            Official Poster
+                        </p>
+                        <p class="text-xs md:text-sm text-gray-400">
+                            Open the dedicated poster page for a visual overview and key highlights of MODEL FORGE 2026.
+                        </p>
+                    </div>
+                    <a href="poster.html" target="_blank"
+                        class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-semibold text-sm md:text-base py-2.5 px-6 rounded-full transition-all transform hover:scale-105 font-orbitron whitespace-nowrap">
+                        View Poster Details
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -500,6 +782,144 @@
                         images, text, and music.</p>
                 </a>
             </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="py-20 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-purple-900/10 to-black/60 pointer-events-none">
+        </div>
+        <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-orbitron text-3xl md:text-4xl font-bold mb-3 gradient-text">Event Timeline</h2>
+                <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto">
+                    Follow the key milestones of MODEL FORGE 2026 from registration to prize distribution.
+                </p>
+            </div>
+
+            <div class="relative">
+                <div class="absolute left-4 md:left-1/2 top-0 bottom-0 border-l border-dashed border-cyan-500/40 pointer-events-none">
+                </div>
+
+                <div class="space-y-10 md:space-y-12">
+                    <!-- Registration Opens -->
+                    <div class="relative flex flex-col md:flex-row gap-4 md:gap-10 items-start md:items-center reveal">
+                        <div class="hidden md:block w-1/2 text-right pr-8">
+                            <p class="font-orbitron text-sm text-cyan-300 tracking-[0.25em] uppercase">Phase 01</p>
+                            <h3 class="font-orbitron text-xl text-white mt-1">Registrations Open</h3>
+                            <p class="text-gray-400 text-sm mt-1">Teams start forming and submitting entries.</p>
+                        </div>
+                        <div
+                            class="relative flex items-center justify-center w-8 h-8 rounded-full bg-black border border-cyan-400/70 shadow-[0_0_20px_rgba(34,211,238,0.6)]">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-8">
+                            <p class="font-mono text-xs text-gray-400 uppercase tracking-wide">Early February 2026</p>
+                            <p class="text-gray-300 text-sm mt-1">
+                                Registration link goes live and teams can officially enroll for the hackathon.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Registration Closes -->
+                    <div class="relative flex flex-col md:flex-row gap-4 md:gap-10 items-start md:items-center reveal">
+                        <div class="w-full md:w-1/2 md:text-right md:pr-8">
+                            <p class="font-mono text-xs text-gray-400 uppercase tracking-wide">Mid February 2026</p>
+                            <p class="text-gray-300 text-sm mt-1">
+                                Last date to register teams and confirm participation.
+                            </p>
+                        </div>
+                        <div
+                            class="relative flex items-center justify-center w-8 h-8 rounded-full bg-black border border-purple-400/70 shadow-[0_0_20px_rgba(168,85,247,0.6)]">
+                            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                        </div>
+                        <div class="hidden md:block w-1/2 md:pl-8">
+                            <p class="font-orbitron text-sm text-purple-300 tracking-[0.25em] uppercase">Phase 02</p>
+                            <h3 class="font-orbitron text-xl text-white mt-1">Registrations Close</h3>
+                            <p class="text-gray-400 text-sm mt-1">Final team list is frozen and logistics are prepared.</p>
+                        </div>
+                    </div>
+
+                    <!-- Hackathon Day -->
+                    <div class="relative flex flex-col md:flex-row gap-4 md:gap-10 items-start md:items-center reveal">
+                        <div class="hidden md:block w-1/2 text-right pr-8">
+                            <p class="font-orbitron text-sm text-emerald-300 tracking-[0.25em] uppercase">Phase 03</p>
+                            <h3 class="font-orbitron text-xl text-white mt-1">Hackathon Day</h3>
+                            <p class="text-gray-400 text-sm mt-1">Full-day ML building sprint at JBIET Main Block.</p>
+                        </div>
+                        <div
+                            class="relative flex items-center justify-center w-8 h-8 rounded-full bg-black border border-emerald-400/70 shadow-[0_0_20px_rgba(52,211,153,0.6)]">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-8">
+                            <p class="font-mono text-xs text-gray-400 uppercase tracking-wide">25 February 2026 · 9:30 AM
+                            </p>
+                            <p class="text-gray-300 text-sm mt-1">
+                                Teams work on the given datasets, build models from scratch, and prepare their final
+                                submissions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Evaluation -->
+                    <div class="relative flex flex-col md:flex-row gap-4 md:gap-10 items-start md:items-center reveal">
+                        <div class="w-full md:w-1/2 md:text-right md:pr-8">
+                            <p class="font-mono text-xs text-gray-400 uppercase tracking-wide">Same Day – Afternoon</p>
+                            <p class="text-gray-300 text-sm mt-1">
+                                Shortlisting, evaluation, and presentations in front of the judging panel.
+                            </p>
+                        </div>
+                        <div
+                            class="relative flex items-center justify-center w-8 h-8 rounded-full bg-black border border-pink-400/70 shadow-[0_0_20px_rgba(244,114,182,0.6)]">
+                            <span class="w-2 h-2 rounded-full bg-pink-400"></span>
+                        </div>
+                        <div class="hidden md:block w-1/2 md:pl-8">
+                            <p class="font-orbitron text-sm text-pink-300 tracking-[0.25em] uppercase">Phase 04</p>
+                            <h3 class="font-orbitron text-xl text-white mt-1">Judging & Presentations</h3>
+                            <p class="text-gray-400 text-sm mt-1">Teams defend their approach, models, and results.</p>
+                        </div>
+                    </div>
+
+                    <!-- Results -->
+                    <div class="relative flex flex-col md:flex-row gap-4 md:gap-10 items-start md:items-center reveal">
+                        <div class="hidden md:block w-1/2 text-right pr-8">
+                            <p class="font-orbitron text-sm text-yellow-300 tracking-[0.25em] uppercase">Phase 05</p>
+                            <h3 class="font-orbitron text-xl text-white mt-1">Results & Prizes</h3>
+                            <p class="text-gray-400 text-sm mt-1">Winners and runners-up are announced and felicitated.</p>
+                        </div>
+                        <div
+                            class="relative flex items-center justify-center w-8 h-8 rounded-full bg-black border border-yellow-400/70 shadow-[0_0_20px_rgba(250,204,21,0.7)]">
+                            <span class="w-2 h-2 rounded-full bg-yellow-300"></span>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-8">
+                            <p class="font-mono text-xs text-gray-400 uppercase tracking-wide">End of Event</p>
+                            <p class="text-gray-300 text-sm mt-1">
+                                Certificates and goodies are distributed to winners and all eligible participants.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Department Section -->
+    <section id="department" class="dept-section reveal">
+        <div class="dept-inner">
+            <div class="dept-glass">
+                <p class="dept-kicker">Organized By</p>
+                <h2 class="dept-title dept-shimmer dept-glow">
+                    Department of<br />
+                    <span class="dept-highlight">Artificial Intelligence &amp; Machine Learning</span>
+                </h2>
+                <h3 class="dept-subtitle dept-shimmer dept-glow">
+                    CSE (<span class="dept-highlight">Artificial Intelligence &amp; Machine Learning</span>)
+                </h3>
+            </div>
+        </div>
+        <div class="dept-particles">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
         </div>
     </section>
 
@@ -756,6 +1176,23 @@
 
         setInterval(updateCountdown, 1000);
         updateCountdown();
+
+        // Typewriter effect for tagline
+        const taglineText = "INNOVATE • BUILD • DEPLOY";
+        const taglineEl = document.getElementById('tagline');
+        let taglineIndex = 0;
+
+        function typeTagline() {
+            if (!taglineEl) return;
+            if (taglineIndex <= taglineText.length) {
+                taglineEl.textContent = taglineText.slice(0, taglineIndex);
+                taglineIndex++;
+                setTimeout(typeTagline, 90);
+            }
+        }
+
+        // small delay so it starts after initial load
+        setTimeout(typeTagline, 600);
 
         // Scroll Reveal Animation
         const observerOptions = {
