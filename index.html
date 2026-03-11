@@ -24,6 +24,41 @@
             overflow-x: hidden;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Performance hints */
+        #canvas-container {
+            will-change: opacity;
+        }
+
+        .floating {
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .reveal {
+            will-change: transform, opacity;
+        }
+
+        .model-card,
+        .winner-card,
+        .winners-modal__panel {
+            transform: translateZ(0);
+        }
+
+        /* Render heavy sections only when near viewport */
+        .cv-auto {
+            content-visibility: auto;
+            contain-intrinsic-size: 900px;
+        }
+
         .font-orbitron {
             font-family: 'Orbitron', sans-serif;
         }
@@ -222,11 +257,863 @@
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.8s ease;
+            transition-delay: var(--reveal-delay, 0ms);
         }
 
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Winners & Champions Section */
+        .winners-section {
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(34, 211, 238, 0.18), transparent 45%),
+                radial-gradient(circle at 90% 20%, rgba(168, 85, 247, 0.14), transparent 50%),
+                radial-gradient(circle at 50% 110%, rgba(59, 130, 246, 0.12), transparent 55%),
+                linear-gradient(180deg, rgba(2, 6, 23, 0.55), rgba(0, 0, 0, 0.65));
+        }
+
+        .winners-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(34, 211, 238, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(168, 85, 247, 0.06) 1px, transparent 1px);
+            background-size: 90px 90px;
+            opacity: 0.25;
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        .winners-shell {
+            position: relative;
+            z-index: 1;
+        }
+
+        .winners-banner {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.12), rgba(168, 85, 247, 0.10));
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.12), 0 0 90px rgba(168, 85, 247, 0.06);
+            backdrop-filter: blur(14px);
+        }
+
+        .winner-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.25rem;
+        }
+
+        .winner-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 10%, rgba(34, 211, 238, 0.14), transparent 55%);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .winner-photo {
+            position: relative;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .dev-code {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00f5ff;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .dev-signature {
+            font-family: 'orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: inline-block;
+            
+            background: linear-gradient(90deg, #22d3ee, #7c3aed, #22d3ee);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientFlow 6s linear infinite;
+            text-shadow:
+            0 0 8px rgba(34, 211, 238, 0.6),
+            0 0 18px rgba(124, 58, 237, 0.4),
+            0 0 28px rgba(34, 211, 238, 0.3);;
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
+        }
+        .dev-cursor {
+            font-family: orbitron, sans-serif;
+            color: #22d3ee;
+            animation: blink 1s infinite;
+        }   
+
+        @keyframes blink {
+            0%, 50%, 100% {
+                opacity: 1;
+            }
+            25%, 75% {
+                opacity: 0;
+            }
+        }
+
+        .winner-photo[data-photo] {
+            background-image:
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.10), transparent 55%),
+                var(--winner-photo, linear-gradient(135deg, rgba(34, 211, 238, 0.20), rgba(168, 85, 247, 0.14), rgba(59, 130, 246, 0.16)));
+            background-size: cover;
+            background-position: center;
+        }
+
+        .winner-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(34, 211, 238, 0.55) !important;
+            box-shadow: 0 18px 60px rgba(34, 211, 238, 0.20);
+        }
+
+        /* Winner image carousel */
+        .runnerup-carousel{
+            position: relative;
+            overflow:hidden;
+            width: 100%;
+            height: 400px;
+        }
+        .runnerup-carousel-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .runnerup-carousel-slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 500ms ease-in-out;
+        }
+        .runnerup-carousel-slide.active {
+            opacity: 1;
+        }
+        .runnerup-carousel-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
+            border-radius: inherit;
+        }
+        .runnerup-carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.55);
+            background: radial-gradient(circle at 30% 30%, rgba(15, 23, 42, 0.90), rgba(15, 23, 42, 0.65));
+            color: rgba(229, 231, 235, 0.92);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+            z-index: 4;
+            touch-action: manipulation;
+        }
+        .runnerup-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 5;
+        }
+        .runnerup-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.4);
+            transition: background 300ms ease;
+            cursor: pointer;
+        }
+        .runnerup-dot.active {
+            background: #22d3ee;
+            transform: scale(1.3);
+        }
+
+        .runnerup-carousel-arrow--left {
+            left: 0.5rem;
+        }
+
+        .runnerup-carousel-arrow--right {
+            right: 0.5rem;
+        }
+
+        .runnerup-carousel-arrow:hover {
+            transform: translateY(-50%) scale(1.06);
+            background: radial-gradient(circle at 30% 30%, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.85));
+            border-color: rgba(209, 213, 219, 0.7);
+            box-shadow: 0 0 18px rgba(34, 211, 238, 0.25);
+        }
+
+        @media (max-width: 640px) {
+            .runnerup-carousel-arrow {
+                width: 28px;
+                height: 28px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .runnerup-carousel-slide {
+                transition: none !important;
+            }
+        }
+
+        .winner-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.85rem;
+            border-radius: 999px;
+            font-family: 'Orbitron', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(2, 6, 23, 0.55);
+            backdrop-filter: blur(10px);
+        }
+
+        .winner-gold {
+            border-color: rgba(251, 191, 36, 0.55) !important;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.18), 0 0 90px rgba(251, 191, 36, 0.08);
+        }
+
+        .winner-gold::after {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: 1.35rem;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.75), rgba(34, 211, 238, 0.28), rgba(168, 85, 247, 0.20));
+            filter: blur(16px);
+            opacity: 0.35;
+            z-index: -1;
+        }
+
+        .winner-gold .winner-badge {
+            border-color: rgba(251, 191, 36, 0.45);
+            box-shadow: 0 0 22px rgba(251, 191, 36, 0.12);
+        }
+
+        /* Winner team members styling */
+        .winner-team-heading {
+            font-size: 0.78rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(250, 204, 21, 0.92);
+            margin-bottom: 0.35rem;
+        }
+
+        .winner-team-list {
+            margin-top: 0.15rem;
+            padding-top: 0.15rem;
+            border-top: 1px solid rgba(250, 204, 21, 0.16);
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        .winner-card.reveal.active .winner-team-list {
+            animation: winner-team-fade-in 520ms cubic-bezier(.2, .9, .2, 1) forwards;
+            animation-delay: 80ms;
+        }
+
+        .winner-team-name {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        @media (min-width: 768px) {
+            .winner-team-name {
+                font-size: 0.95rem;
+            }
+        }
+
+        @keyframes winner-team-fade-in {
+            0% {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Runner up silver glow */
+        .runnerup-name {
+            background: linear-gradient(120deg, #22d3ee, #3b82f6, #a855f7);
+            background-size: 160% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow:
+                0 0 8px rgba(56, 189, 248, 0.45),
+                0 0 16px rgba(129, 140, 248, 0.35);
+        }
+        .runnerup-team-name {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            font-weight: 500;
+            color: #ffffff;
+        }
+        .runnerup-team-list {
+            margin-top: 8px;
+            margin-bottom: 16px;
+            padding-top: 0.15rem;
+            border-top: 1px solid rgba(250, 204, 21, 0.16);
+            transform: translateY(6px);
+        }
+        .runnerup-team-heading {
+            font-size: 0.78rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #D1D5DB;
+            margin-bottom: 0.35rem;
+        } 
+
+        @media (prefers-reduced-motion: reduce) {
+            .runnerup-name {
+                text-shadow: none;
+            }
+        }
+        @media (min-width: 768px) {
+            .runnerup-team-name {
+                font-size: 0.95rem;
+            }
+        }
+
+
+        /* Subtle confetti */
+        #confetti-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 60;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            top: -12vh;
+            opacity: 0.0;
+            border-radius: 4px;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.08));
+            animation: confetti-fall var(--dur, 3200ms) ease-out forwards;
+            will-change: transform, opacity;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translate3d(var(--x, 0), -12vh, 0) rotate(0deg);
+                opacity: 0;
+            }
+
+            12% {
+                opacity: 0.65;
+            }
+
+            100% {
+                transform: translate3d(var(--x, 0), 112vh, 0) rotate(var(--rot, 520deg));
+                opacity: 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .confetti-piece {
+                animation: none !important;
+                display: none !important;
+            }
+        }
+
+        /* Mobile performance: reduce expensive blur during scroll */
+        @media (max-width: 768px) {
+            #canvas-container {
+                opacity: 0.42;
+            }
+
+            .model-card,
+            .dept-glass,
+            .winners-banner,
+            .winners-modal__panel {
+                backdrop-filter: none !important;
+            }
+
+            .neon-border {
+                box-shadow: 0 0 10px rgba(0, 255, 249, 0.18),
+                    inset 0 0 10px rgba(0, 255, 249, 0.06);
+            }
+
+            .winner-gold {
+                box-shadow: 0 0 20px rgba(251, 191, 36, 0.12), 0 0 55px rgba(251, 191, 36, 0.06);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .floating,
+            .glitch,
+            .pulse-btn,
+            .dept-shimmer,
+            .dept-glow {
+                animation: none !important;
+            }
+
+            .reveal {
+                transition: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+
+        /* Pre-dim overlay (before modal appears) */
+        #pre-dim-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 65;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(6px);
+            opacity: 0;
+            transition: opacity 380ms ease;
+        }
+
+        body.pre-dim #pre-dim-overlay {
+            opacity: 1;
+        }
+
+        /* Winners Modal Popup */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        body.modal-open .page-blur {
+            filter: blur(6px);
+            transform: scale(1.005);
+            transition: filter 300ms ease, transform 300ms ease;
+        }
+
+        body.pre-dim .page-blur {
+            filter: blur(2px);
+            transform: scale(1.002);
+        }
+
+        .page-blur {
+            transition: filter 300ms ease, transform 300ms ease;
+        }
+
+        .winners-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 70;
+            display: none;
+            isolation: isolate;
+        }
+
+        .winners-modal[data-open="true"] {
+            display: block;
+        }
+
+        .winners-modal__overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transition: opacity 260ms ease;
+            z-index: 0;
+        }
+
+        .winners-modal[data-open="true"] .winners-modal__overlay {
+            opacity: 1;
+        }
+
+        .winners-modal[data-open="true"][data-closing="true"] .winners-modal__overlay {
+            opacity: 0;
+        }
+
+        .winners-modal__panel {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, calc(-50% + 10px)) scale(0.975);
+            width: min(980px, calc(100vw - 2rem));
+            max-height: min(86vh, 760px);
+            overflow: auto;
+            border-radius: 1.5rem;
+            background: rgba(15, 23, 42, 0.70);
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            box-shadow:
+                0 0 50px rgba(34, 211, 238, 0.12),
+                0 0 120px rgba(168, 85, 247, 0.08);
+            backdrop-filter: blur(18px);
+            opacity: 0;
+            transition: opacity 280ms ease, transform 320ms cubic-bezier(.2, .9, .2, 1);
+            z-index: 1;
+        }
+
+        .winners-modal[data-open="true"] .winners-modal__panel {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .winners-modal[data-open="true"][data-closing="true"] .winners-modal__panel {
+            opacity: 0;
+            transform: translate(-50%, calc(-50% + 8px)) scale(0.985);
+        }
+
+        .winners-modal__panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border-top: 1px solid rgba(34, 211, 238, 0.55);
+            border-left: 1px solid rgba(129, 140, 248, 0.35);
+            border-right: 1px solid rgba(236, 72, 153, 0.22);
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .winners-modal__header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            padding: 1.25rem 1.25rem 1rem;
+            background: linear-gradient(180deg, rgba(2, 6, 23, 0.78), rgba(2, 6, 23, 0.35));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+        }
+
+        .winners-modal__title {
+            font-family: 'Orbitron', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            font-size: clamp(1.25rem, 2.5vw, 2rem);
+            line-height: 1.2;
+        }
+
+        .winners-modal__subtitle {
+            margin-top: 0.5rem;
+            color: rgba(209, 213, 219, 0.88);
+            font-size: 0.95rem;
+        }
+
+        .winners-modal__close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            z-index: 3;
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(2, 6, 23, 0.55);
+            color: rgba(229, 231, 235, 0.95);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+            touch-action: manipulation;
+        }
+
+        .winners-modal__close:hover {
+            transform: translateY(-1px);
+            background: rgba(2, 6, 23, 0.75);
+            border-color: rgba(34, 211, 238, 0.35);
+        }
+
+        .winners-modal__body {
+            padding: 1.25rem;
+        }
+
+        /* Cinematic stagger reveal */
+        .modal-stagger {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .winners-modal[data-open="true"] .modal-stagger {
+            animation: modal-stagger-in 620ms cubic-bezier(.2, .9, .2, 1) forwards;
+            animation-delay: var(--stagger, 0ms);
+        }
+
+        @keyframes modal-stagger-in {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .winners-modal__grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 900px) {
+            .winners-modal__grid {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+        }
+
+        .champions-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 920px) {
+            .champions-layout {
+                grid-template-columns: 1fr;
+                align-items: start;
+                gap: 1.25rem;
+            }
+        }
+
+        .winner-hero {
+            border-color: rgba(251, 191, 36, 0.55) !important;
+        }
+
+        .winner-hero,
+        .runner-silver {
+            margin-inline: auto;
+        }
+
+        @media (min-width: 920px) {
+            .winner-hero {
+                width: min(980px, 100%);
+            }
+
+            .runner-silver {
+                width: min(760px, 100%);
+            }
+        }
+
+        .runner-silver {
+            position: relative;
+            border-color: rgba(148, 163, 184, 0.55) !important;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(148, 163, 184, 0.25), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.20), transparent 55%),
+                rgba(15, 23, 42, 0.94);
+            box-shadow:
+                0 0 28px rgba(148, 163, 184, 0.30),
+                0 0 80px rgba(56, 189, 248, 0.20);
+            transition: transform 180ms ease, box-shadow 220ms ease, border-color 220ms ease;
+        }
+
+        .runner-silver:hover {
+            transform: translateY(-4px);
+            border-color: rgba(148, 163, 184, 0.85) !important;
+            box-shadow:
+                0 0 36px rgba(148, 163, 184, 0.35),
+                0 0 96px rgba(56, 189, 248, 0.24);
+        }
+
+        .runner-silver .winner-badge {
+            border-color: rgba(226, 232, 240, 0.24);
+            background: rgba(15, 23, 42, 0.85);
+        }
+
+        /* Premium shine sweep for Winner */
+        .shine-sweep {
+            position: relative;
+        }
+
+        .shine-sweep::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(115deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.00) 38%,
+                    rgba(251, 191, 36, 0.18) 48%,
+                    rgba(255, 255, 255, 0.08) 52%,
+                    rgba(255, 255, 255, 0.00) 62%,
+                    transparent 100%);
+            transform: translateX(-120%);
+            opacity: 0.75;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        .winners-modal[data-open="true"] .shine-sweep::after {
+            animation: shine-sweep 2400ms cubic-bezier(.2, .9, .2, 1) 520ms infinite;
+        }
+
+        @keyframes shine-sweep {
+            0% {
+                transform: translateX(-120%);
+                opacity: 0;
+            }
+
+            14% {
+                opacity: 0.65;
+            }
+
+            35% {
+                transform: translateX(120%);
+                opacity: 0.10;
+            }
+
+            100% {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        /* Elegant gold dust (modal background particles) */
+        .gold-dust {
+            position: absolute;
+            top: -10%;
+            width: var(--s, 6px);
+            height: var(--s, 6px);
+            left: var(--l, 50%);
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 30%, rgba(251, 191, 36, 0.95), rgba(251, 191, 36, 0.0) 68%);
+            opacity: 0;
+            filter: blur(0.2px) drop-shadow(0 0 10px rgba(251, 191, 36, 0.10));
+            animation: gold-dust-fall var(--d, 4200ms) ease-out forwards;
+            animation-delay: var(--delay, 0ms);
+            will-change: transform, opacity;
+        }
+
+        @keyframes gold-dust-fall {
+            0% {
+                transform: translate3d(var(--x, 0), -14vh, 0) scale(0.9);
+                opacity: 0;
+            }
+
+            14% {
+                opacity: 0.45;
+            }
+
+            100% {
+                transform: translate3d(var(--x, 0), 110vh, 0) scale(1.05);
+                opacity: 0;
+            }
+        }
+
+        .winners-modal__footer {
+            padding: 1rem 1.25rem 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            align-items: center;
+            background: linear-gradient(0deg, rgba(2, 6, 23, 0.72), rgba(2, 6, 23, 0.28));
+        }
+
+        .btn-premium {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.85rem 1.1rem;
+            border-radius: 999px;
+            font-family: 'Orbitron', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            transition: transform 180ms ease, box-shadow 240ms ease, border-color 180ms ease, background 180ms ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-premium:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            color: rgba(3, 7, 18, 0.95);
+            background: linear-gradient(90deg, rgba(34, 211, 238, 0.95), rgba(59, 130, 246, 0.95));
+            border-color: rgba(34, 211, 238, 0.35);
+            box-shadow: 0 0 30px rgba(34, 211, 238, 0.18);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 45px rgba(34, 211, 238, 0.26);
+        }
+
+        .btn-ghost {
+            color: rgba(229, 231, 235, 0.95);
+            background: rgba(2, 6, 23, 0.35);
+        }
+
+        .btn-ghost:hover {
+            transform: translateY(-1px);
+            border-color: rgba(168, 85, 247, 0.30);
+            box-shadow: 0 0 28px rgba(168, 85, 247, 0.14);
+        }
+
+        .modal-confetti {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+            border-radius: inherit;
+        }
+
+        .winners-modal__header,
+        .winners-modal__body,
+        .winners-modal__footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body.modal-open .page-blur {
+                filter: none;
+                transform: none;
+            }
+
+            .winners-modal__overlay,
+            .winners-modal__panel {
+                transition: none !important;
+            }
         }
 
         /* Nav underline hover */
@@ -346,9 +1233,9 @@
         }
 
         .dept-subtitle {
-            font-family: 'Rajdhani', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: clamp(1.1rem, 2.4vw, 1.45rem);
-            font-weight: 500;
+            font-family: 'Orbitron', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: clamp(1.4rem, 2.7vw, 1.9rem);
+            font-weight: 800;
             color: rgba(209, 213, 219, 0.95);
         }
 
@@ -389,7 +1276,6 @@
         }
 
         @keyframes dept-glow-pulse {
-
             0%,
             100% {
                 text-shadow:
@@ -534,14 +1420,107 @@
 
     <!-- Three.js Background -->
     <div id="canvas-container"></div>
+    <div id="confetti-overlay" aria-hidden="true"></div>
 
+    <!-- Auto Winners Modal -->
+    <div id="pre-dim-overlay" aria-hidden="true"></div>
+
+    <div id="winners-modal" class="winners-modal" data-open="false" aria-hidden="true">
+        <div class="winners-modal__overlay" data-modal-close></div>
+
+        <div class="winners-modal__panel neon-border" role="dialog" aria-modal="true"
+            aria-labelledby="winners-modal-title">
+            <div class="modal-confetti" id="modal-confetti" aria-hidden="true"></div>
+
+            <header class="winners-modal__header">
+                <button class="winners-modal__close" type="button" aria-label="Close winners popup" data-modal-close>
+                    <span class="font-orbitron text-lg">✕</span>
+                </button>
+
+                <p class="font-orbitron tracking-[0.22em] text-xs text-cyan-200/90 uppercase modal-stagger"
+                    style="--stagger: 80ms;">
+                    Official Announcement
+                </p>
+                <h2 id="winners-modal-title" class="winners-modal__title neon-text modal-stagger"
+                    style="--stagger: 140ms;">
+                    🏆 Hackathon 2026 – Official Champions
+                </h2>
+                <p class="winners-modal__subtitle modal-stagger" style="--stagger: 220ms;">
+                    Celebrating Innovation, Excellence &amp; Impact
+                </p>
+            </header>
+
+            <div class="winners-modal__body">
+                <div class="champions-layout">
+                    <!-- 🥇 WINNER -->
+                    <article class="winner-card model-card border winner-gold winner-hero shine-sweep p-5 md:p-6 transition-all duration-300 modal-stagger"
+                        style="--stagger: 320ms;">
+                        <div class="flex flex-col gap-5 items-start">
+                            <div class="w-full">
+                                <div class="winner-photo h-64 md:h-80 w-full border border-white/10"
+                                    data-photo style="--winner-photo: url('winners/team-winner.jpg');">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                                    <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                                        <span class="winner-badge text-yellow-300">🥇 Winner</span>
+                                        <span class="text-xs text-gray-300/90 font-mono">Official Champion</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full text-center md:text-left">
+                                <h3 class="font-orbitron text-2xl md:text-3xl font-extrabold text-yellow-300">
+                                    Shouryangulu
+                                </h3>
+                                <p class="text-gray-300 mt-2">
+                                    duVision 2026 is an AI-powered classroom analytics system that automates real-time student detection and attendance tracking using YOLOv8-based computer vision.
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 🥈 RUNNER UP -->
+                    <article class="winner-card model-card border runner-silver p-5 md:p-6 transition-all duration-300 modal-stagger"
+                        style="--stagger: 460ms;">
+                        <div class="flex flex-col gap-4">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="winner-badge text-gray-300">🥈 Runner Up</span>
+                                <span class="text-xs text-gray-400 font-mono">Finalist</span>
+                            </div>
+                            <div class="winner-photo h-52 md:h-60 w-full border border-white/10"
+                                data-photo style="--winner-photo: url('winners/team-runnerup.jpg');">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent"></div>
+                            </div>
+                            <div class="text-center md:text-left">
+                    <h3 class="font-orbitron text-xl md:text-2xl font-bold runnerup-name">4Visionaries</h3>
+                                <p class="text-gray-300 mt-1 text-sm md:text-base">
+                                    4Visionaries developed an AI-powered Image Super-Resolution system that enhances low-quality images using a Deep Residual CNN (EDSR-style) architecture.
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <footer class="winners-modal__footer">
+                <button type="button" class="btn-premium btn-ghost modal-stagger" style="--stagger: 520ms;"
+                    data-modal-close>
+                    Close
+                </button>
+                <button type="button" class="btn-premium btn-primary modal-stagger" style="--stagger: 560ms;"
+                    id="view-full-results">
+                    View Full Results
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <div class="page-blur">
     <!-- Navigation -->
     <nav class="fixed w-full z-50 top-0 left-0 bg-black/50 backdrop-blur-md border-b border-white/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-2">
                     <img class="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center"
-                        src="jb-logo.png" alt="logo" />
+                        src="jb-logo.png" alt="logo" width="40" height="40" decoding="async" fetchpriority="high" />
                     <span class="font-orbitron font-bold text-3xl hidden sm:block">JBIET</span>
                 </div>
                 <div class="flex items-center gap-8">
@@ -549,6 +1528,7 @@
                         <a href="#about" class="nav-link hover:text-cyan-400 transition-colors">About</a>
                         <a href="#models" class="nav-link hover:text-cyan-400 transition-colors">Models</a>
                         <a href="#details" class="nav-link hover:text-cyan-400 transition-colors">Details</a>
+                        <a href="#winners" class="nav-link hover:text-cyan-400 transition-colors">Winners</a>
                         <a href="#contact" class="nav-link hover:text-cyan-400 transition-colors">Contact</a>
                     </div>
                     <a href="https://docs.google.com/forms/d/e/1FAIpQLSfENHZLJ-09EuN-hygqh1z3tMvYNlqa3z8HlhjItQre44q4RA/viewform"
@@ -567,10 +1547,10 @@
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div class="mb-6 reveal">
-                <span class="inline-block px-3 py-2 text-sm font-semibold tracking-wider mb-4 dept-shimmer dept-glow">
+                <span
+                    class="inline-block px-3 py-2 text-sm font-semibold tracking-wider mb-4 dept-shimmer dept-glow">
                     Department of <br />Artificial Intelligence &amp; Machine Learning<br />&amp;<br />CSE (Artificial
-                    Intelligence &amp;
-                    Machine Learning)
+                    Intelligence &amp; Machine Learning)
                 </span>
             </div>
 
@@ -622,7 +1602,7 @@
                     Register Now
                 </a>
 
-                <a href="guidelines.html"
+                <a href="guidelines.html" target="_blank"
                     class="border border-cyan-500/50 hover:bg-cyan-500/10 text-cyan-400 font-bold py-4 px-8 rounded-full transition-all font-orbitron text-lg backdrop-blur-sm inline-block text-center">
                     Hackathon Guidelines
                 </a>
@@ -630,8 +1610,7 @@
 
             <!-- Poster Link Section (Button Only) -->
             <div class="mt-10 max-w-3xl mx-auto reveal">
-                <div
-                    class="model-card rounded-2xl border border-cyan-500/40 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="model-card rounded-2xl border border-cyan-500/40 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div class="text-left">
                         <p class="font-orbitron text-sm tracking-[0.25em] text-cyan-300 uppercase mb-1">
                             Official Poster
@@ -640,7 +1619,7 @@
                             Open the dedicated poster page for a visual overview and key highlights of MODEL FORGE 2026.
                         </p>
                     </div>
-                    <a href="poster.html"
+                    <a href="poster.html" target="_blank"
                         class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-semibold text-sm md:text-base py-2.5 px-6 rounded-full transition-all transform hover:scale-105 font-orbitron whitespace-nowrap">
                         View Poster Details
                     </a>
@@ -656,7 +1635,7 @@
     </section>
 
     <!-- Event Details -->
-    <section id="details" class="py-20 relative">
+    <section id="details" class="py-20 relative cv-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="model-card rounded-2xl p-8 reveal">
@@ -702,7 +1681,7 @@
     </section>
 
     <!-- ML Models -->
-    <section id="models" class="py-20 relative overflow-hidden">
+    <section id="models" class="py-20 relative overflow-hidden cv-auto">
         <div class="absolute inset-0 bg-gradient-to-r from-cyan-900/10 to-purple-900/10"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-16 reveal">
@@ -787,7 +1766,7 @@
     </section>
 
     <!-- Timeline Section -->
-    <section id="timeline" class="py-20 relative">
+    <section id="timeline" class="py-20 relative cv-auto">
         <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-purple-900/10 to-black/60 pointer-events-none">
         </div>
         <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -799,8 +1778,7 @@
             </div>
 
             <div class="relative">
-                <div
-                    class="absolute left-4 md:left-1/2 top-0 bottom-0 border-l border-dashed border-cyan-500/40 pointer-events-none">
+                <div class="absolute left-4 md:left-1/2 top-0 bottom-0 border-l border-dashed border-cyan-500/40 pointer-events-none">
                 </div>
 
                 <div class="space-y-10 md:space-y-12">
@@ -838,8 +1816,7 @@
                         <div class="hidden md:block w-1/2 md:pl-8">
                             <p class="font-orbitron text-sm text-purple-300 tracking-[0.25em] uppercase">Phase 02</p>
                             <h3 class="font-orbitron text-xl text-white mt-1">Registrations Close</h3>
-                            <p class="text-gray-400 text-sm mt-1">Final team list is frozen and logistics are prepared.
-                            </p>
+                            <p class="text-gray-400 text-sm mt-1">Final team list is frozen and logistics are prepared.</p>
                         </div>
                     </div>
 
@@ -855,8 +1832,7 @@
                             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                         </div>
                         <div class="w-full md:w-1/2 md:pl-8">
-                            <p class="font-mono text-xs text-gray-400 uppercase tracking-wide">25 February 2026 · 9:30
-                                AM
+                            <p class="font-mono text-xs text-gray-400 uppercase tracking-wide">25 February 2026 · 9:30 AM
                             </p>
                             <p class="text-gray-300 text-sm mt-1">
                                 Teams work on the given datasets, build models from scratch, and prepare their final
@@ -889,8 +1865,7 @@
                         <div class="hidden md:block w-1/2 text-right pr-8">
                             <p class="font-orbitron text-sm text-yellow-300 tracking-[0.25em] uppercase">Phase 05</p>
                             <h3 class="font-orbitron text-xl text-white mt-1">Results & Prizes</h3>
-                            <p class="text-gray-400 text-sm mt-1">Winners and runners-up are announced and felicitated.
-                            </p>
+                            <p class="text-gray-400 text-sm mt-1">Winners and runners-up are announced and felicitated.</p>
                         </div>
                         <div
                             class="relative flex items-center justify-center w-8 h-8 rounded-full bg-black border border-yellow-400/70 shadow-[0_0_20px_rgba(250,204,21,0.7)]">
@@ -909,7 +1884,7 @@
     </section>
 
     <!-- Department Section -->
-    <section id="department" class="dept-section reveal">
+    <section id="department" class="dept-section reveal cv-auto">
         <div class="dept-inner">
             <div class="dept-glass">
                 <p class="dept-kicker">Organized By</p>
@@ -918,7 +1893,7 @@
                     <span class="dept-highlight">Artificial Intelligence &amp; Machine Learning</span>
                 </h2>
                 <h3 class="dept-subtitle dept-shimmer dept-glow">
-                    CSE (<span class="dept-highlight">Artificial Intelligence &amp; Machine Learning</span>)
+                    <span class="dept-highlight">CSE (Artificial Intelligence &amp; Machine Learning)</span>
                 </h3>
             </div>
         </div>
@@ -957,8 +1932,189 @@
         </div>
     </section>
 
+    <!-- Hackathon 2026 Winners & Champions -->
+    <section id="winners" class="winners-section py-20 relative">
+        <div class="winners-shell max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-5xl mx-auto text-center">
+                <div class="winners-banner rounded-2xl px-6 py-5 md:px-8 md:py-6 reveal">
+                    <p class="font-orbitron tracking-[0.22em] text-xs md:text-sm text-cyan-200/90 uppercase mb-2">
+                        Hackathon 2026 Winners &amp; Champions
+                    </p>
+                    <h2 class="font-orbitron text-2xl md:text-4xl font-black neon-text">
+                        🎉 Hackathon 2026 Successfully Completed – Meet Our Champions!
+                    </h2>
+                    <p class="text-gray-300/90 mt-3 text-sm md:text-base">
+                        Celebrating the teams that stood out with innovation, execution, and impact.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                <!-- 🥇 1st Place -->
+                <!-- 🥇 1st Place -->
+<article
+    class="winner-card model-card border border-yellow-400/40 winner-gold lg:col-span-7 p-6 md:p-7 transition-all duration-300 reveal">
+
+    <div class="flex flex-col gap-6">
+
+        <!-- ⭐ WINNER CAROUSEL -->
+        <div class="runnerup-carousel w-full border border-white/10 relative rounded-2xl overflow-hidden"
+            data-runnerup-carousel>
+
+            <div class="runnerup-carousel-track" data-runnerup-track>
+
+                <div class="runnerup-carousel-slide" data-runnerup-slide>
+                    <img src="winners/winner1.png"
+                        alt="Shouryangulu team photo 1"
+                        class="runnerup-carousel-img"
+                        loading="lazy" />
+                </div>
+
+                <div class="runnerup-carousel-slide" data-runnerup-slide>
+                    <img src="winners/winner2.jpeg"
+                        alt="Shouryangulu team photo 2"
+                        class="runnerup-carousel-img"
+                        loading="lazy" />
+                </div>
+
+                <div class="runnerup-carousel-slide" data-runnerup-slide>
+                    <img src="winners/winner3.png"
+                        alt="Shouryangulu team photo 3"
+                        class="runnerup-carousel-img"
+                        loading="lazy" />
+                </div>
+                <div class="runnerup-carousel-slide" data-runnerup-slide>
+                    <img src="winners/winner4.png"
+                        alt="Shouryangulu team photo 3"
+                        class="runnerup-carousel-img"
+                        loading="lazy" />
+                </div>
+
+            </div>
+
+            <button class="runnerup-carousel-arrow runnerup-carousel-arrow--left"
+                type="button" aria-label="Previous photo"
+                data-runnerup-prev>
+                ‹
+            </button>
+
+            <button class="runnerup-carousel-arrow runnerup-carousel-arrow--right"
+                type="button" aria-label="Next photo"
+                data-runnerup-next>
+                ›
+            </button>
+
+            <div class="runnerup-dots" data-runnerup-dots></div>
+        </div>
+
+        <!-- ⭐ WINNER DETAILS -->
+        <div class="flex-1">
+            <div class="flex flex-wrap items-center gap-3 mb-3">
+                <h3 class="font-orbitron text-2xl md:text-3xl font-extrabold text-yellow-300">
+                    Shouryangulu
+                </h3>
+                <span class="px-3 py-1 rounded-full bg-yellow-400/10 text-yellow-200 text-xs border border-yellow-400/20">
+                    Winners
+                </span>
+            </div>
+
+            <div class="winner-team-list text-left mt-1">
+                <p class="winner-team-heading">Team Members</p>
+                <ul class="space-y-1">
+                    <li class="winner-team-name">Nadimpalli Kavishik Surya varma</li>
+                    <li class="winner-team-name">Eppa Amarender</li>
+                    <li class="winner-team-name">Nela Anand Prakash</li>
+                    <li class="winner-team-name">Kommu Aryan babu</li>
+                </ul>
+            </div>
+
+            <div class="mt-5 flex flex-wrap gap-2">
+                <span class="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-200 text-xs border border-cyan-500/20">Innovation</span>
+                <span class="px-3 py-1 rounded-full bg-purple-500/10 text-purple-200 text-xs border border-purple-500/20">Execution</span>
+                <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-200 text-xs border border-blue-500/20">Impact</span>
+            </div>
+
+            <p class="mt-4 text-xs text-gray-300">
+                EduVision 2026 is an AI-powered classroom analytics system that automates real-time student detection and attendance tracking using YOLOv8-based computer vision.
+            </p>
+        </div>
+
+    </div>
+</article>
+
+                <!-- 🥈 Runner Up -->
+                <article
+                    class="winner-card model-card border border-gray-300/20 runner-silver lg:col-span-5 p-6 md:p-7 transition-all duration-300 reveal"
+                    style="--reveal-delay: 120ms;">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="winner-badge text-gray-200">🥈 Runner Up</span>
+                        <span class="text-xs text-gray-400 font-mono">Finalist</span>
+                    </div>                   
+                    <div class="runnerup-photo runnerup-carousel w-full border border-white/10 mb-5 relative rounded-2xl overflow-hidden"
+                        data-runnerup-carousel>
+                        <div class="runnerup-carousel-track" data-runnerup-track>
+                            <div class="runnerup-carousel-slide" data-runnerup-slide>
+                                <img src="runner-up/runner1.jpeg" alt="4Visionaries team photo 1"
+                                    class="runnerup-carousel-img" loading="lazy" decoding="async"
+                                    style="object-position: 90% 50%;"/>
+                            </div>
+                            <div class="runnerup-carousel-slide" data-runnerup-slide>
+                                <img src="runner-up/runner2.jpeg" alt="4Visionaries team photo 2"
+                                    class="runnerup-carousel-img" loading="lazy" decoding="async" />
+                            </div>
+                            <div class="runnerup-carousel-slide" data-runnerup-slide>
+                                <img src="runner-up/runner3.jpeg" alt="4Visionaries team photo 3"
+                                    class="runnerup-carousel-img" loading="lazy" decoding="async" />
+                            </div>
+                            <div class="runnerup-carousel-slide" data-runnerup-slide>
+                                <img src="runner-up/runner4.jpeg" alt="4Visionaries team photo 4"
+                                    class="runnerup-carousel-img" loading="lazy" decoding="async"/>
+                            </div>
+                        </div>
+                        <button class="runnerup-carousel-arrow runnerup-carousel-arrow--left" type="button"
+                            aria-label="Previous photo" data-runnerup-prev>
+                            ‹
+                        </button>
+                        <button class="runnerup-carousel-arrow runnerup-carousel-arrow--right" type="button"
+                            aria-label="Next photo" data-runnerup-next>
+                            ›
+                        </button>
+                        <div class="runnerup-dots" data-runnerup-dots></div>
+                        
+                    </div>
+                    <h3 class="font-orbitron text-xl md:text-2xl font-bold runnerup-name mb-4">4Visionaries</h3>
+                    <div class="runnerup-team-list text-left mt-3">
+                        <p class="runnerup-team-heading">Team Members</p>
+                        <ul class="space-y-1">
+                            <li class="runnerup-team-name">G. Prasanna</li>
+                            <li class="runnerup-team-name">A.haindavi</li>
+                            <li class="runnerup-team-name">A. Srinithiya</li>
+                            <li class="runnerup-team-name">G. Sathvitka</li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <span
+                            class="px-3 py-1 rounded-full bg-sky-500/10 text-sky-300 text-xs border border-sky-500/40">Super
+                            Resolution</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-300 text-xs border border-indigo-500/40">Deep
+                            Learning</span>
+                        <span
+                            class="px-3 py-1 rounded-full bg-purple-500/10 text-purple-300 text-xs border border-purple-500/40">Computer
+                            Vision</span>
+                    </div>
+                    <p class="text-gray-300 text-sm mt-4 leading-relaxed">
+                        4Visionaries developed an AI-powered Image Super-Resolution system that enhances low-quality images using a Deep Residual CNN (EDSR-style) architecture.
+                    </p>
+                    
+                </article>
+
+            </div>
+        </div>
+    </section>
+
     <!-- Organizers -->
-    <section id="contact" class="py-20 relative bg-black/30">
+    <section id="contact" class="py-20 relative bg-black/30 cv-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-12">
                 <div class="reveal">
@@ -966,14 +2122,14 @@
                     <div class="space-y-4">
                         <div class="flex items-center justify-between p-4 model-card rounded-xl">
                             <div>
-                                <p class="font-semibold text-white">Affan (CSM)</p>
+                                <p class="font-semibold text-white">Affan </p>
                                 <p class="text-sm text-gray-400">Student Coordinator</p>
                             </div>
                             <a href="tel:9848673893" class="text-cyan-400 hover:text-cyan-300 font-mono">9848673893</a>
                         </div>
                         <div class="flex items-center justify-between p-4 model-card rounded-xl">
                             <div>
-                                <p class="font-semibold text-white">John Dinakar (AI&ML)</p>
+                                <p class="font-semibold text-white">John Dinakar </p>
                                 <p class="text-sm text-gray-400">Student Coordinator</p>
                             </div>
                             <a href="tel:9059159947" class="text-cyan-400 hover:text-cyan-300 font-mono">9059159947</a>
@@ -991,6 +2147,13 @@
                                 <p class="text-sm text-gray-400">Student Coordinator</p>
                             </div>
                             <a href="tel:7396296236" class="text-cyan-400 hover:text-cyan-300 font-mono">7396296236</a>
+                        </div>
+                        <div class="flex items-center justify-between p-4 model-card rounded-xl">
+                            <div>
+                                <p class="font-semibold text-white">Mohammed Umairuddin</p>
+                                <p class="text-sm text-gray-400">Student Coordinator</p>
+                            </div>
+                            <a href="tel:9347531423" class="text-cyan-400 hover:text-cyan-300 font-mono">9347531423</a>
                         </div>
                     </div>
                 </div>
@@ -1053,7 +2216,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-white/10 py-12 bg-black/50">
+    <footer id="mainFooter" class="border-t border-white/10 py-12 bg-black/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="text-center md:text-left">
@@ -1063,46 +2226,63 @@
                 </div>
 
                 <div class="flex gap-4">
-                    <div
-                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-cyan-500/20 transition-colors cursor-pointer">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
-                        </svg>
-                    </div>
-                    <div
-                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-cyan-500/20 transition-colors cursor-pointer">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                        </svg>
-                    </div>
-                    <div
-                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-cyan-500/20 transition-colors cursor-pointer">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path
-                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                        </svg>
-                    </div>
+                    <a href="https://www.instagram.com/dept_of_aiml_jbiet/"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <div
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-cyan-500/20 transition-colors cursor-pointer">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </div>
+                    </a>
+                    <a href="https://www.linkedin.com/posts/dept-of-aiml-jbiet-5103493b0_warm-greetings-from-jb-institute-of-engineering-share-7427566782984540161-Eqqk"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <div
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-cyan-500/20 transition-colors cursor-pointer">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                            </svg>
+                        </div>
+                    </a>
                 </div>
             </div>
-            <div class="mt-8 pt-8 border-t border-white/5 text-center text-gray-500 text-sm">
+            <div class="mt-8 pt-8 border-t border-white/5 text-center text-gray-500 text-sm space-y-1">
                 <p>&copy; 2026 JB Institute of Engineering & Technology. All rights reserved.</p>
+                <p class="text-xs md:text-sm text-gray-400">
+                    Designed &amp; developed by 
+                    &lt;
+                    <span id="devName" class="dev-signature"></span>
+                    /&gt;
+                    <span id="devCursor" class="dev-cursor">|</span>
+                </p>
             </div>
         </div>
     </footer>
+    </div>
 
     <script>
-        // Three.js Background Animation
+        // Three.js Background Animation (tuned for performance)
+        const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        const renderer = new THREE.WebGLRenderer({
+            alpha: true,
+            antialias: !isMobile,
+            powerPreference: 'high-performance'
+        });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.0 : 1.25));
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
         // Create particles
         const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 1500;
+        const particlesCount = prefersReducedMotion ? 0 : (isMobile ? 750 : 1500);
         const posArray = new Float32Array(particlesCount * 3);
 
         for (let i = 0; i < particlesCount * 3; i++) {
@@ -1120,7 +2300,7 @@
         });
 
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
+        if (particlesCount > 0) scene.add(particlesMesh);
 
         camera.position.z = 5;
 
@@ -1131,10 +2311,12 @@
         document.addEventListener('mousemove', (event) => {
             mouseX = (event.clientX / window.innerWidth) * 2 - 1;
             mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-        });
+        }, { passive: true });
 
         // Animation loop
+        let threeRunning = true;
         function animate() {
+            if (!threeRunning) return;
             requestAnimationFrame(animate);
 
             particlesMesh.rotation.y += 0.001;
@@ -1147,14 +2329,21 @@
             renderer.render(scene, camera);
         }
 
-        animate();
+        if (!prefersReducedMotion && particlesCount > 0) animate();
 
         // Handle resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.0 : 1.25));
         });
+
+        // Pause Three.js when tab hidden (saves battery / prevents jank)
+        document.addEventListener('visibilitychange', () => {
+            threeRunning = document.visibilityState === 'visible';
+            if (threeRunning && !prefersReducedMotion && particlesCount > 0) animate();
+        }, { passive: true });
 
         // Countdown Timer - FIXED VERSION
         const targetDate = new Date('February 25, 2026 9:30:00').getTime();
@@ -1164,7 +2353,7 @@
             const distance = targetDate - now;
 
             if (distance < 0) {
-                document.getElementById('countdown').innerHTML = '<div class="text-2xl font-orbitron text-cyan-400">EVENT STARTED!</div>';
+                document.getElementById('countdown').innerHTML = '<div class="text-2xl font-orbitron text-cyan-400">EVENT COMPLETED!</div>';
                 return;
             }
 
@@ -1229,16 +2418,371 @@
             });
         });
 
-        // Parallax effect for floating elements
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallax = document.querySelectorAll('.floating');
-            parallax.forEach((element, index) => {
-                const speed = 0.5 + (index * 0.2);
-                element.style.transform = `translateY(${scrolled * speed}px)`;
+        // Parallax effect (throttled + passive; disabled on mobile/reduced-motion)
+        (function setupParallax() {
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const smallScreen = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+            if (reduceMotion || smallScreen) return;
+
+            const parallax = Array.from(document.querySelectorAll('.floating'));
+            if (!parallax.length) return;
+
+            let ticking = false;
+            let lastY = 0;
+
+            const update = () => {
+                ticking = false;
+                const y = lastY;
+                for (let i = 0; i < parallax.length; i++) {
+                    const speed = 0.08 + (i * 0.04);
+                    parallax[i].style.transform = `translate3d(0, ${y * speed}px, 0)`;
+                }
+            };
+
+            window.addEventListener('scroll', () => {
+                lastY = window.scrollY || window.pageYOffset || 0;
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(update);
+                }
+            }, { passive: true });
+        })();
+
+        function launchConfettiInto(overlay, intensity = 1) {
+            if (!overlay) return;
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduceMotion) return;
+
+            const colors = ['#22d3ee', '#a855f7', '#38bdf8', '#fbbf24', '#fb7185', '#e5e7eb'];
+            const base = Math.min(30, Math.max(18, Math.floor(window.innerWidth / 55)));
+            const pieces = Math.round(base * Math.min(1.25, Math.max(0.7, intensity)));
+            const frag = document.createDocumentFragment();
+
+            for (let i = 0; i < pieces; i++) {
+                const el = document.createElement('span');
+                el.className = 'confetti-piece';
+
+                const left = Math.random() * 100;
+                const x = (Math.random() * 24 - 12).toFixed(2) + 'vw';
+                const rot = (Math.random() * 720 + 260).toFixed(0) + 'deg';
+                const dur = (Math.random() * 850 + 2550).toFixed(0) + 'ms';
+                const delay = (Math.random() * 450).toFixed(0) + 'ms';
+
+                const w = (Math.random() * 6 + 6).toFixed(0);
+                const h = (Math.random() * 10 + 10).toFixed(0);
+
+                el.style.left = left + 'vw';
+                el.style.width = w + 'px';
+                el.style.height = h + 'px';
+                el.style.background = colors[Math.floor(Math.random() * colors.length)];
+                el.style.setProperty('--x', x);
+                el.style.setProperty('--rot', rot);
+                el.style.setProperty('--dur', dur);
+                el.style.animationDelay = delay;
+
+                frag.appendChild(el);
+            }
+
+            overlay.appendChild(frag);
+
+            // Cleanup after animation ends
+            window.setTimeout(() => {
+                overlay.innerHTML = '';
+            }, 5200);
+        }
+
+        // Subtle confetti on load (auto-fades)
+        function launchConfetti() {
+            launchConfettiInto(document.getElementById('confetti-overlay'), 0.85);
+        }
+
+        // Winner image carousel (all winner/runner cards)
+        function initrunnerupCarousel() {
+            const containers = document.querySelectorAll('[data-runnerup-carousel]');
+            if (!containers.length) return;
+
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            containers.forEach((container) => {
+                const slides = Array.from(container.querySelectorAll('[data-runnerup-slide]'));
+                if (!slides.length) return;
+
+                let index = 0;
+                const total = slides.length;
+                const dotsContainer = container.querySelector('[data-runnerup-dots]');
+                let dots = [];
+                if (dotsContainer) {
+                    dotsContainer.innerHTML = '';
+
+                    for (let i = 0; i < total; i++) {
+                         const dot = document.createElement('div');
+                        dot.className = 'runnerup-dot';
+                        dot.addEventListener('click', () => {
+                            index = i;
+                            updateSlide();
+                            restartTimer();
+                        });
+                        dotsContainer.appendChild(dot);
+                        dots.push(dot);
+                    }
+                }  
+                updateSlide();
+                  
+                let timerId = null;
+
+                // ensure exactly one slide is visible initially
+                slides.forEach((slide, i) => {
+                    if (i === 0) {
+                        slide.classList.add('active');
+                    } else {
+                        slide.classList.remove('active');
+                    }
+                });
+
+                function updateSlide() {
+                    // fade logic: show only the active slide
+                    slides.forEach((slide, i) => {
+                        if (i === index) {
+                            slide.classList.add('active');
+                        } else {
+                            slide.classList.remove('active');
+                        }
+                    });
+
+                    if (dots.length){
+                        dots.forEach(d=> d.classList.remove('active'));
+                        if(dots[index]) dots[index].classList.add('active');
+                    }
+                }
+
+                function next() {
+                    index++;
+                    if (index >= total) {
+                        index = 0;
+                    }
+                    updateSlide();
+                }
+
+                function prev() {
+                    index--;
+                    if (index < 0) {
+                        index = total - 1;
+                    }
+                    updateSlide();
+                }
+
+                function restartTimer() {
+                    if (timerId) window.clearInterval(timerId);
+                    if (reduceMotion) return;
+                    timerId = window.setInterval(next, 3000);
+                }
+                //button controls
+                const prevBtn = container.querySelector('[data-runnerup-prev]');
+                const nextBtn = container.querySelector('[data-runnerup-next]');
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        prev();
+                        restartTimer();
+                    });
+                }
+
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        next();
+                        restartTimer();
+                    });
+                }
+                updateSlide();
+                restartTimer();
+
+                // Pause auto-slide on hover/focus (desktop)
+                container.addEventListener('mouseenter', () => {
+                    if (timerId) window.clearInterval(timerId);
+                });
+                container.addEventListener('mouseleave', () => {
+                    restartTimer();
+                });
+
+                
             });
-        });
+        }
+
+        // Auto winners modal on load (DOM-safe + hardened click targets)
+        function initWinnersModal() {
+            const modal = document.getElementById('winners-modal');
+            if (!modal) return;
+
+            const overlay = modal.querySelector('.winners-modal__overlay');
+            const closeBtn = modal.querySelector('.winners-modal__close');
+            const viewBtn = document.getElementById('view-full-results');
+            const modalConfetti = document.getElementById('modal-confetti');
+            const preDim = document.getElementById('pre-dim-overlay');
+
+            const CLOSE_MS = 320;
+            const OPEN_DELAY_MS = 1000;
+            const SESSION_KEY = 'mf_winners_reveal_shown';
+
+            const openModal = () => {
+                modal.removeAttribute('data-closing');
+                modal.dataset.open = 'true';
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('modal-open');
+                document.body.classList.remove('pre-dim');
+
+                // Elegant gold dust when popup appears
+                launchGoldDustInto(modalConfetti, 0.9);
+
+                // Focus close button for accessibility
+                if (closeBtn) closeBtn.focus({ preventScroll: true });
+            };
+
+            const closeModal = () => {
+                if (modal.dataset.open !== 'true' || modal.getAttribute('aria-hidden') === 'true') return;
+                if (modal.getAttribute('data-closing') === 'true') return;
+                modal.setAttribute('data-closing', 'true');
+
+                window.setTimeout(() => {
+                    modal.dataset.open = 'false';
+                    modal.removeAttribute('data-closing');
+                    modal.setAttribute('aria-hidden', 'true');
+                    document.body.classList.remove('modal-open');
+                    document.body.classList.remove('pre-dim');
+                }, CLOSE_MS);
+            };
+
+            // Explicit click targets (prevents selector/overlay/z-index surprises)
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeModal();
+                });
+            }
+
+            if (overlay) {
+                overlay.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closeModal();
+                });
+            }
+
+            // Escape key
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            // View full results
+            if (viewBtn) {
+                viewBtn.addEventListener('click', () => {
+                    closeModal();
+                    const target = document.getElementById('winners');
+                    if (target) {
+                        window.setTimeout(() => {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 50);
+                    }
+                });
+            }
+
+            // Show only once per session, with cinematic delay
+            window.addEventListener('load', () => {
+                try {
+                    if (sessionStorage.getItem(SESSION_KEY) === 'true') return;
+                    sessionStorage.setItem(SESSION_KEY, 'true');
+                } catch (_) { }
+
+                document.body.classList.add('pre-dim');
+                if (preDim) preDim.style.pointerEvents = 'none';
+
+                window.setTimeout(openModal, OPEN_DELAY_MS);
+            }, { once: true });
+        }
+
+        function onDomReady() {
+            initWinnersModal();
+            initrunnerupCarousel();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', onDomReady, { once: true });
+        } else {
+            onDomReady();
+        }
+
+        window.addEventListener('load', () => {
+            launchConfetti();
+        }, { once: true });
+
+        function launchGoldDustInto(container, intensity = 1) {
+            if (!container) return;
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduceMotion) return;
+
+            const pieces = Math.min(22, Math.max(12, Math.round((window.innerWidth / 120) * intensity)));
+            const frag = document.createDocumentFragment();
+
+            for (let i = 0; i < pieces; i++) {
+                const el = document.createElement('span');
+                el.className = 'gold-dust';
+
+                const left = Math.random() * 100;
+                const x = (Math.random() * 18 - 9).toFixed(2) + 'vw';
+                const dur = (Math.random() * 1600 + 3400).toFixed(0) + 'ms';
+                const delay = (Math.random() * 420).toFixed(0) + 'ms';
+                const s = (Math.random() * 5 + 4).toFixed(0) + 'px';
+
+                el.style.setProperty('--l', left + 'vw');
+                el.style.setProperty('--x', x);
+                el.style.setProperty('--d', dur);
+                el.style.setProperty('--delay', delay);
+                el.style.setProperty('--s', s);
+
+                frag.appendChild(el);
+            }
+
+            container.appendChild(frag);
+
+            window.setTimeout(() => {
+                container.innerHTML = '';
+            }, 5400);
+        }
     </script>
+    
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const nameElement = document.getElementById("devName");
+    const footer = document.getElementById("mainFooter");
+    const fullText = "Mohammed Umairuddin";
+    let index = 0;
+    let hasTyped = false;
+
+    function typeWriter() {
+        if (index < fullText.length) {
+            nameElement.textContent += fullText.charAt(index);
+            index++;
+            setTimeout(typeWriter, 70);
+        }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !hasTyped) {
+                hasTyped = true;
+                typeWriter();
+            }
+        });
+    }, { threshold: 0.4 });
+
+    observer.observe(footer);
+});
+</script>
 </body>
 
 </html>
